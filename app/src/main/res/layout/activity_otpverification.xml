@@ -27,7 +27,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="95dp"
             android:ems="10"
-            android:inputType="number" />
+            android:inputType="number"
+            android:hint="Enter OTP"/>
 
         <Button
             android:id="@+id/verifybtn"

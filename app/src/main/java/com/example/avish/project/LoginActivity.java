@@ -33,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
 
         /* temperary intent Start */
 
-        Intent tempintent = new Intent(LoginActivity.this, UserFormActivity.class);
-        startActivity(tempintent);
+//        Intent tempintent = new Intent(LoginActivity.this, UserFormActivity.class);
+//        startActivity(tempintent);
 
         /* Temporary intent End */
 
