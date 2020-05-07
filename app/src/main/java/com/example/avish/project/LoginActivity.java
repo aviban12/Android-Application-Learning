@@ -31,12 +31,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /* temperary intant Start */
+        /* temperary intent Start */
 
         Intent tempintent = new Intent(LoginActivity.this, UserFormActivity.class);
         startActivity(tempintent);
 
-        /* Temporary intant end */
+        /* Temporary intent End */
 
         Button loginbtn = findViewById(R.id.loginbtn);
         final EditText phonenumber = findViewById(R.id.phonenumber);
@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /* Send code */
+    /* Send code Start */
     private void SendVerificationCode(String number){
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 number,
@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
     /* send Code End */
 
     /* Redirecting to otpverification Activity */
+
     private void VerifyCode(String code){
         Intent verficationintent = new Intent(LoginActivity.this, Otpverification.class);
         verficationintent.putExtra("code", code);
