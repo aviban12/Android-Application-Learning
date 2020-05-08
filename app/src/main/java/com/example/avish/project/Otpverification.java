@@ -21,10 +21,13 @@ public class Otpverification extends AppCompatActivity {
             public void onClick(View v) {
                 /* OTP Verification Start */
                 final int otp = Integer.parseInt(otpcode.getText().toString());
-                final int code = Integer.parseInt(getIntent().getStringExtra("code"));
-                Log.d("codes value", otp + " " + code );
+                final int code = Integer.parseInt(getIntent().getStringExtra("otpcode"));
+                final String phonenumber = getIntent().getStringExtra("phonenumber");
+                Log.d("codes value", otp + " " + code + " " + phonenumber);
                 if(otp == code){
                     Intent UserDetailactivityintent = new Intent(Otpverification.this, UserFormActivity.class);
+                    Log.d("phonenumber", phonenumber);
+                    UserDetailactivityintent.putExtra("phonenumber", phonenumber);
                     startActivity(UserDetailactivityintent);
                     Log.d("Verification message ", "verified");
                 }

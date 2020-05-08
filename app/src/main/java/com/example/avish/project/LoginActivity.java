@@ -20,12 +20,14 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     private String verificationid;
     private FirebaseAuth mAuth;
     private ProgressBar progressbar;
     private EditText editText;
+    private String Cwnumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
         /* temperary intent Start */
 
-//        Intent tempintent = new Intent(LoginActivity.this, UserFormActivity.class);
-//        startActivity(tempintent);
+        Intent tempintent = new Intent(LoginActivity.this, NewsfeedActivity.class);
+        startActivity(tempintent);
 
         /* Temporary intent End */
 
@@ -56,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 }else{
                     gd.setColor(Color.WHITE);
                     phonenumber.setBackground(gd);
-                    String Cwnumber = "+91"+number;
+                    Cwnumber = "+91" + number;
                     Log.d("Phone number ", Cwnumber);
                     SendVerificationCode(Cwnumber);
                 }
@@ -94,7 +96,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void VerifyCode(String code){
         Intent verficationintent = new Intent(LoginActivity.this, Otpverification.class);
-        verficationintent.putExtra("code", code);
+        verficationintent.putExtra("otpcode", code);
+        verficationintent.putExtra("phonenumber", Cwnumber);
         startActivity(verficationintent);
     }
 

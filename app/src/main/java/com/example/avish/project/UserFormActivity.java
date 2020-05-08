@@ -43,7 +43,9 @@ public class UserFormActivity extends AppCompatActivity {
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
-
+    String phonenumber ;
+    Bitmap OriginalImage, resizedBitmap;
+    Uri imageuri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,7 @@ public class UserFormActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Check runtime permission
+                phonenumber = getIntent().getStringExtra("phonenumber");
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_DENIED){
@@ -85,7 +88,12 @@ public class UserFormActivity extends AppCompatActivity {
                 String firstname = Firstinp.getText().toString();
                 String lastname = Lastinp.getText().toString();
                 String email = emailinp.getText().toString();
-                Submitdata(firstname, lastname, email);
+                phonenumber = getIntent().getStringExtra("phonenumber");
+                int done = Submitdata(firstname, lastname, email);
+                if(done == 1){
+                    Intent newsfeedintent = new Intent(UserFormActivity.this, NewsfeedActivity.class);
+                    startActivity(newsfeedintent);
+                }
             }
 
 
@@ -106,8 +114,8 @@ public class UserFormActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
             try {
+                imageuri = data.getData();
                 Resizeanduploadimage(data.getData());
-                Storeimageinfirebase(data.getData());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -118,7 +126,6 @@ public class UserFormActivity extends AppCompatActivity {
     /* Resize image Start */
     private void Resizeanduploadimage(Uri data) throws IOException {
         int width, height, newheight = 300, newwidth = 300;
-        Bitmap OriginalImage, resizedBitmap;
         Matrix matrix;
         float scalewidth, scaleheight;
         ByteArrayOutputStream outputStream;
@@ -143,7 +150,7 @@ public class UserFormActivity extends AppCompatActivity {
     /* Resize image end */
 
 
-    // Handle request of runtime permission
+    /* Handle request of runtime permission Start */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
        switch (requestCode){
@@ -157,6 +164,7 @@ public class UserFormActivity extends AppCompatActivity {
            }
        }
     }
+    /* Handle request of runtime permission END */
 
     private void Storeimageinfirebase(Uri image){
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -164,7 +172,7 @@ public class UserFormActivity extends AppCompatActivity {
         StorageReference imagestorageref
                 = storageReference
                 .child(
-                        "+917618426321/"
+                        phonenumber+"/"
                                 + UUID.randomUUID().toString());
         imagestorageref.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -175,20 +183,22 @@ public class UserFormActivity extends AppCompatActivity {
 
     }
 
-    private void Submitdata(String firstname, String lastname, String email){
+    private int Submitdata(String firstname, String lastname, String email){
         /* Initializing Firebase Database to store user information  Start */
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference("+917618426321");
+        final DatabaseReference myRef = database.getReference(phonenumber);
 
         /* Firebase Database initialisation end */
 
-        if(firstname.length() == 0 && lastname.length() == 0 && email.length() == 0 ){
+        if( firstname.length() == 0 && lastname.length() == 0 && email.length() == 0 ){
             Toast.makeText(this, "Invalid user details" , Toast.LENGTH_LONG).show();
         }else{
             myRef.child("Userdetails").child("Name").setValue(firstname + " " + lastname);
             myRef.child("Userdetails").child("Email").setValue(email);
-            myRef.child("userhandle").child("Instagram").setValue("bansal_avish");
+            myRef.child("userhandle").child("Instagram").setValue("temp_account");
+            Storeimageinfirebase(imageuri);
         }
+        return 1;
     }
 }
